@@ -1,51 +1,52 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.99 0.01 95);
-  --foreground: oklch(0.19 0.02 255);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.19 0.02 255);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.19 0.02 255);
-  --primary: oklch(0.49 0.16 250);
-  --primary-foreground: oklch(0.99 0.01 95);
-  --secondary: oklch(0.95 0.02 250);
-  --secondary-foreground: oklch(0.24 0.04 255);
-  --muted: oklch(0.94 0.02 95);
-  --muted-foreground: oklch(0.46 0.03 255);
-  --accent: oklch(0.74 0.17 145);
-  --accent-foreground: oklch(0.16 0.03 145);
-  --destructive: oklch(0.58 0.22 25);
-  --destructive-foreground: oklch(0.99 0.01 95);
-  --border: oklch(0.88 0.02 250);
-  --input: oklch(0.88 0.02 250);
-  --ring: oklch(0.49 0.16 250);
-  --radius: 0.5rem;
-}
-
-.dark {
-  --background: oklch(0.16 0.02 255);
-  --foreground: oklch(0.96 0.01 95);
-  --card: oklch(0.2 0.02 255);
-  --card-foreground: oklch(0.96 0.01 95);
-  --popover: oklch(0.2 0.02 255);
-  --popover-foreground: oklch(0.96 0.01 95);
-  --primary: oklch(0.68 0.14 250);
-  --primary-foreground: oklch(0.12 0.02 255);
-  --secondary: oklch(0.27 0.03 255);
-  --secondary-foreground: oklch(0.96 0.01 95);
-  --muted: oklch(0.27 0.03 255);
-  --muted-foreground: oklch(0.75 0.02 255);
-  --accent: oklch(0.74 0.17 145);
-  --accent-foreground: oklch(0.12 0.02 145);
-  --destructive: oklch(0.64 0.2 25);
-  --destructive-foreground: oklch(0.96 0.01 95);
-  --border: oklch(0.32 0.03 255);
-  --input: oklch(0.32 0.03 255);
-  --ring: oklch(0.68 0.14 250);
+  --color_background: #FFFFFF;
+  --color_primary: #1E40AF;
+  --color_text_default: #1F2937;
+  --color_border_default: #E5E7EB;
+  --color_surface: #FFFFFF;
+  --color_text_muted: #6B7280;
+  --color_danger: #DC2626;
+  --color_success: #16A34A;
+  --page_padding: 24px;
+  --component_gap: 16px;
+  --section_gap: 24px;
+  --gnb_height: 64px;
+  --content_max_width: 1200px;
+  --button_border_radius: 8px;
+  --card_border_radius: 8px;
+  --border_default: 1px solid #E5E7EB;
+  --button_height: 40px;
+  --input_height: 40px;
+  --card_padding: 16px;
+  --font_family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font_size_body: 14px;
+  --font_size_title: 20px;
+  --font_size_section_title: 16px;
+  --line_height_body: 1.5;
+  --font_weight_regular: 400;
+  --font_weight_semibold: 600;
+  --background: #FFFFFF;
+  --foreground: #1F2937;
+  --card: #FFFFFF;
+  --card-foreground: #1F2937;
+  --popover: #FFFFFF;
+  --popover-foreground: #1F2937;
+  --primary: #1E40AF;
+  --primary-foreground: #FFFFFF;
+  --secondary: #FFFFFF;
+  --secondary-foreground: #1F2937;
+  --muted: #F9FAFB;
+  --muted-foreground: #6B7280;
+  --accent: #FFFFFF;
+  --accent-foreground: #1F2937;
+  --destructive: #B91C1C;
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #1E40AF;
+  --radius: 8px;
 }
 
 @theme inline {
@@ -80,9 +81,9 @@
 
   body {
     @apply m-0 min-h-svh bg-background text-foreground antialiased;
-    font-family:
-      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-      sans-serif;
+    font-family: var(--font_family);
+    font-size: var(--font_size_body);
+    line-height: var(--line_height_body);
   }
 
   button,
@@ -90,5 +91,13 @@
   textarea,
   select {
     font: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
   }
 }
