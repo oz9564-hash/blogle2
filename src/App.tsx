@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import { CalendarCheck, ClipboardCheck, UserRoundCheck } from 'lucide-react'
+import { CalendarCheck, ClipboardCheck, FlaskConical, UserRoundCheck } from 'lucide-react'
 
 type UserRole = 'recruiter' | 'candidate' | 'interviewer'
 type ApplicationStatus = 'submitted' | 'confirmed' | 'evaluating' | 'completed'
@@ -66,7 +66,7 @@ const candidateProfiles: CandidateProfile[] = [
     phone: '010-9876-5432',
     position: 'AI 서비스 기획자',
     resumeSummary: '채용 자동화 챗봇 기획과 사용자 리서치 경험',
-    portfolioSummary: '질문 추천 정책, 평가 루브릭, 후보자 여정 개선안 포함',
+    portfolioSummary: '질문 추천 정책, 평가 루브릭, 온보딩 개선안 포함',
     availableTimes: ['2026-06-02 15:00', '2026-06-05 11:00', '2026-06-05 17:00'],
   },
 ]
@@ -94,17 +94,17 @@ const questionSets: InterviewQuestionSet[] = [
   {
     applicationId: 'app_2026_001',
     questions: [
-      '예약 가능한 시간 목록을 사용자가 빠르게 수정할 수 있게 설계한 방식은 무엇인가요?',
-      'React 상태와 서버 데이터를 분리할 때 어떤 기준으로 책임을 나누나요?',
-      '면접 일정 조율 챗봇의 오류 상황을 UI에서 어떻게 안내하겠나요?',
+      '예약 가능한 시간을 사용자가 빠르게 수정하게 하려면 어떤 UI가 적절한가요?',
+      'React 상태와 서버 데이터를 어떤 기준으로 분리하겠나요?',
+      '면접 일정 조율 중 오류 상황을 어떻게 안내하겠나요?',
     ],
   },
   {
     applicationId: 'app_2026_002',
     questions: [
-      '지원자 이력서 기반 질문 추천 품질을 어떤 지표로 검증하겠나요?',
-      '기업과 인재의 가능한 시간이 충돌할 때 추천 우선순위를 어떻게 정하겠나요?',
-      '면접관 평가 화면에서 가장 먼저 보여야 할 정보는 무엇인가요?',
+      '지원자 이력 기반 질문 추천을 어떤 지표로 검증하겠나요?',
+      '기업과 인재의 가능한 시간이 충돌할 때 우선순위를 어떻게 정하겠나요?',
+      '면접관 평가 화면에서 가장 먼저 보여줘야 할 정보는 무엇인가요?',
     ],
   },
 ]
@@ -114,7 +114,7 @@ const evaluations: Evaluation[] = [
     applicationId: 'app_2026_001',
     score: '대기',
     status: '평가 예정',
-    comment: '면접 전 질문 검토 필요',
+    comment: '면접 후 질문 검토 필요',
   },
   {
     applicationId: 'app_2026_002',
@@ -126,12 +126,13 @@ const evaluations: Evaluation[] = [
 
 function App() {
   const [currentUser, setCurrentUser] = useState<FakeUser>(fakeUsers[0])
+  const pathname = window.location.pathname
 
   return (
     <main className="min-h-svh bg-background text-foreground">
       <GlobalNavigation currentUser={currentUser} onUserChange={setCurrentUser} />
       <section className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-6 py-6">
-        <RoleView currentUser={currentUser} />
+        {pathname === '/test2' ? <Test2Page currentUser={currentUser} /> : <RoleView currentUser={currentUser} />}
       </section>
     </main>
   )
@@ -150,10 +151,10 @@ function GlobalNavigation({
         <div>
           <p className="text-sm font-semibold text-primary">Interview Scheduler MVP</p>
           <p className="text-xs text-muted-foreground">
-            현재 로그인: {currentUser.name} · {getRoleLabel(currentUser.role)}
+            현재 사용자 {currentUser.name} · {getRoleLabel(currentUser.role)}
           </p>
         </div>
-        <nav className="flex flex-wrap gap-2" aria-label="더미 로그인 전환">
+        <nav className="flex flex-wrap gap-2" aria-label="데모 사용자 전환">
           {fakeUsers.map((user) => {
             const isActive = currentUser.id === user.id
 
@@ -180,6 +181,33 @@ function GlobalNavigation({
   )
 }
 
+function Test2Page({ currentUser }: { currentUser: FakeUser }) {
+  return (
+    <section className="flex flex-col gap-6">
+      <ViewHeader
+        icon={<FlaskConical className="size-5" aria-hidden="true" />}
+        title="/test2 테스트 페이지"
+        badge={getRoleLabel(currentUser.role)}
+        description={`${currentUser.name} 사용자 상태를 유지한 채 확인하는 테스트 페이지입니다.`}
+      />
+      <div className="grid gap-4 md:grid-cols-3">
+        <section className="rounded-lg border border-border bg-card p-4">
+          <h2 className="mb-2 text-base font-semibold">현재 사용자</h2>
+          <p className="text-sm text-muted-foreground">{currentUser.name}</p>
+        </section>
+        <section className="rounded-lg border border-border bg-card p-4">
+          <h2 className="mb-2 text-base font-semibold">역할</h2>
+          <p className="text-sm text-muted-foreground">{getRoleLabel(currentUser.role)}</p>
+        </section>
+        <section className="rounded-lg border border-border bg-card p-4">
+          <h2 className="mb-2 text-base font-semibold">경로</h2>
+          <p className="text-sm text-muted-foreground">/test2</p>
+        </section>
+      </div>
+    </section>
+  )
+}
+
 function RoleView({ currentUser }: { currentUser: FakeUser }) {
   if (currentUser.role === 'recruiter') {
     return <RecruiterView currentUser={currentUser} />
@@ -200,7 +228,7 @@ function CandidateView({ currentUser }: { currentUser: FakeUser }) {
     : undefined
 
   if (!profile || !application) {
-    return <EmptyState title="지원자 데이터가 없습니다." description="더미 지원자 데이터 연결 상태를 확인하세요." />
+    return <EmptyState title="지원자 데이터가 없습니다." description="데모 지원자 데이터 연결 상태를 확인하세요." />
   }
 
   return (
@@ -209,7 +237,7 @@ function CandidateView({ currentUser }: { currentUser: FakeUser }) {
         icon={<UserRoundCheck className="size-5" aria-hidden="true" />}
         title={`${currentUser.name} 지원자 화면`}
         badge={getStatusLabel(application.status)}
-        description={`${currentUser.title}로 로그인된 상태입니다. 본인의 신청 정보와 면접 진행 상태만 확인합니다.`}
+        description={`${currentUser.title}로 선택된 상태입니다. 본인의 신청 정보와 면접 진행 상태를 확인합니다.`}
       />
       <div className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
         <section className="rounded-lg border border-border bg-card p-4">
@@ -235,7 +263,7 @@ function CandidateView({ currentUser }: { currentUser: FakeUser }) {
       </div>
       <section className="rounded-lg border border-border bg-card p-4">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-base font-semibold">내 면접 신청 상태</h2>
+          <h2 className="text-base font-semibold">면접 신청 상태</h2>
           <StatusBadge label={getStatusLabel(application.status)} />
         </div>
         <DataTable
