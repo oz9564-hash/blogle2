@@ -128,11 +128,18 @@ function App() {
   const [currentUser, setCurrentUser] = useState<FakeUser>(fakeUsers[0])
   const pathname = window.location.pathname
 
+  const content =
+    pathname === '/test'
+      ? <TestPage currentUser={currentUser} />
+      : pathname === '/test2'
+        ? <Test2Page currentUser={currentUser} />
+        : <RoleView currentUser={currentUser} />
+
   return (
     <main className="min-h-svh bg-background text-foreground">
       <GlobalNavigation currentUser={currentUser} onUserChange={setCurrentUser} />
       <section className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-6 py-6">
-        {pathname === '/test2' ? <Test2Page currentUser={currentUser} /> : <RoleView currentUser={currentUser} />}
+        {content}
       </section>
     </main>
   )
@@ -202,6 +209,33 @@ function Test2Page({ currentUser }: { currentUser: FakeUser }) {
         <section className="rounded-lg border border-border bg-card p-4">
           <h2 className="mb-2 text-base font-semibold">경로</h2>
           <p className="text-sm text-muted-foreground">/test2</p>
+        </section>
+      </div>
+    </section>
+  )
+}
+
+function TestPage({ currentUser }: { currentUser: FakeUser }) {
+  return (
+    <section className="flex flex-col gap-6">
+      <ViewHeader
+        icon={<FlaskConical className="size-5" aria-hidden="true" />}
+        title="/test 테스트 페이지"
+        badge={getRoleLabel(currentUser.role)}
+        description={`${currentUser.name} 사용자 상태를 유지한 채 /test 경로를 확인하는 페이지입니다.`}
+      />
+      <div className="grid gap-4 md:grid-cols-3">
+        <section className="rounded-lg border border-border bg-card p-4">
+          <h2 className="mb-2 text-base font-semibold">경로</h2>
+          <p className="text-sm text-muted-foreground">/test</p>
+        </section>
+        <section className="rounded-lg border border-border bg-card p-4">
+          <h2 className="mb-2 text-base font-semibold">현재 사용자</h2>
+          <p className="text-sm text-muted-foreground">{currentUser.name}</p>
+        </section>
+        <section className="rounded-lg border border-border bg-card p-4">
+          <h2 className="mb-2 text-base font-semibold">상태</h2>
+          <p className="text-sm text-muted-foreground">렌더링 정상</p>
         </section>
       </div>
     </section>
