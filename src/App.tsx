@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import { CalendarCheck, ClipboardCheck, UserRoundCheck } from 'lucide-react'
+import { CalendarCheck, ClipboardCheck, FlaskConical, UserRoundCheck } from 'lucide-react'
 
 type UserRole = 'recruiter' | 'candidate' | 'interviewer'
 type ApplicationStatus = 'submitted' | 'confirmed' | 'evaluating' | 'completed'
@@ -44,10 +44,10 @@ type Evaluation = {
 }
 
 const fakeUsers: FakeUser[] = [
-  { id: 'user_soohyun', name: '김수현', role: 'candidate', title: '프론트엔드 지원자' },
-  { id: 'user_haneul', name: '정하늘', role: 'candidate', title: 'AI 서비스 기획 지원자' },
-  { id: 'user_jiyoung', name: '박지영', role: 'recruiter', title: '채용담당자' },
-  { id: 'user_minjae', name: '이민재', role: 'interviewer', title: '기술 면접관' },
+  { id: 'user_soohyun', name: 'Kim Soohyun', role: 'candidate', title: 'Frontend Engineer Applicant' },
+  { id: 'user_haneul', name: 'Jung Haneul', role: 'candidate', title: 'AI Service Planner Applicant' },
+  { id: 'user_jiyoung', name: 'Park Jiyoung', role: 'recruiter', title: 'Recruiting Manager' },
+  { id: 'user_minjae', name: 'Lee Minjae', role: 'interviewer', title: 'Technical Interviewer' },
 ]
 
 const candidateProfiles: CandidateProfile[] = [
@@ -55,18 +55,18 @@ const candidateProfiles: CandidateProfile[] = [
     userId: 'user_soohyun',
     email: 'soohyun@example.com',
     phone: '010-1234-5678',
-    position: '프론트엔드 개발자',
-    resumeSummary: 'React 기반 대시보드와 예약 플로우 구현 경험',
-    portfolioSummary: '면접 일정 조율 UI, 캘린더 컴포넌트, 폼 검증 예제 포함',
+    position: 'Frontend Developer',
+    resumeSummary: 'Built React dashboards, calendar workflows, and booking validation flows.',
+    portfolioSummary: 'Includes scheduling UI, calendar components, and accessibility-focused examples.',
     availableTimes: ['2026-06-02 10:00', '2026-06-03 14:00', '2026-06-04 16:00'],
   },
   {
     userId: 'user_haneul',
     email: 'haneul@example.com',
     phone: '010-9876-5432',
-    position: 'AI 서비스 기획자',
-    resumeSummary: '채용 자동화 챗봇 기획과 사용자 리서치 경험',
-    portfolioSummary: '질문 추천 정책, 평가 루브릭, 후보자 여정 개선안 포함',
+    position: 'AI Service Planner',
+    resumeSummary: 'Planned recruiting automation chatbots and user research workflows.',
+    portfolioSummary: 'Includes question recommendation specs, evaluation loops, and scheduling drafts.',
     availableTimes: ['2026-06-02 15:00', '2026-06-05 11:00', '2026-06-05 17:00'],
   },
 ]
@@ -94,17 +94,17 @@ const questionSets: InterviewQuestionSet[] = [
   {
     applicationId: 'app_2026_001',
     questions: [
-      '예약 가능한 시간 목록을 사용자가 빠르게 수정할 수 있게 설계한 방식은 무엇인가요?',
-      'React 상태와 서버 데이터를 분리할 때 어떤 기준으로 책임을 나누나요?',
-      '면접 일정 조율 챗봇의 오류 상황을 UI에서 어떻게 안내하겠나요?',
+      'How would you design fast edits for available interview times?',
+      'Where should React state end and server data begin in this workflow?',
+      'How would you surface scheduling conflicts clearly in the UI?',
     ],
   },
   {
     applicationId: 'app_2026_002',
     questions: [
-      '지원자 이력서 기반 질문 추천 품질을 어떤 지표로 검증하겠나요?',
-      '기업과 인재의 가능한 시간이 충돌할 때 추천 우선순위를 어떻게 정하겠나요?',
-      '면접관 평가 화면에서 가장 먼저 보여야 할 정보는 무엇인가요?',
+      'How would you validate the quality of AI-generated interview questions?',
+      'How should schedule recommendations be prioritized across company and applicant constraints?',
+      'What information should an interviewer see first during evaluation?',
     ],
   },
 ]
@@ -112,26 +112,58 @@ const questionSets: InterviewQuestionSet[] = [
 const evaluations: Evaluation[] = [
   {
     applicationId: 'app_2026_001',
-    score: '대기',
-    status: '평가 예정',
-    comment: '면접 전 질문 검토 필요',
+    score: 'Pending',
+    status: 'Evaluation scheduled',
+    comment: 'Interview questions need final review.',
   },
   {
     applicationId: 'app_2026_002',
     score: '88',
-    status: '평가 완료',
-    comment: '문제 정의와 사용자 흐름 설명이 명확함',
+    status: 'Evaluation complete',
+    comment: 'Problem definition and user flow explanation were clear.',
   },
 ]
 
 function App() {
   const [currentUser, setCurrentUser] = useState<FakeUser>(fakeUsers[0])
+  const isTestPage = window.location.pathname === '/test'
+
+  if (isTestPage) {
+    return <TestPage />
+  }
 
   return (
     <main className="min-h-svh bg-background text-foreground">
       <GlobalNavigation currentUser={currentUser} onUserChange={setCurrentUser} />
       <section className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-6 py-6">
         <RoleView currentUser={currentUser} />
+      </section>
+    </main>
+  )
+}
+
+function TestPage() {
+  return (
+    <main className="min-h-svh bg-background text-foreground">
+      <section className="mx-auto flex w-full max-w-[960px] flex-col gap-6 px-6 py-10">
+        <ViewHeader
+          icon={<FlaskConical className="size-5" aria-hidden="true" />}
+          title="Test Page"
+          badge="Ready"
+          description="A small standalone page for checking routing, styles, and deployment behavior."
+        />
+        <div className="grid gap-4 md:grid-cols-3">
+          {[
+            ['Route', '/test'],
+            ['Build', 'Vite + React'],
+            ['Status', 'Rendered successfully'],
+          ].map(([label, value]) => (
+            <section key={label} className="rounded-lg border border-border bg-card p-4">
+              <p className="text-sm font-semibold text-muted-foreground">{label}</p>
+              <p className="mt-2 text-lg font-semibold">{value}</p>
+            </section>
+          ))}
+        </div>
       </section>
     </main>
   )
@@ -150,10 +182,10 @@ function GlobalNavigation({
         <div>
           <p className="text-sm font-semibold text-primary">Interview Scheduler MVP</p>
           <p className="text-xs text-muted-foreground">
-            현재 로그인: {currentUser.name} · {getRoleLabel(currentUser.role)}
+            Signed in as {currentUser.name} · {getRoleLabel(currentUser.role)}
           </p>
         </div>
-        <nav className="flex flex-wrap gap-2" aria-label="더미 로그인 전환">
+        <nav className="flex flex-wrap gap-2" aria-label="Demo user switcher">
           {fakeUsers.map((user) => {
             const isActive = currentUser.id === user.id
 
@@ -200,46 +232,46 @@ function CandidateView({ currentUser }: { currentUser: FakeUser }) {
     : undefined
 
   if (!profile || !application) {
-    return <EmptyState title="지원자 데이터가 없습니다." description="더미 지원자 데이터 연결 상태를 확인하세요." />
+    return <EmptyState title="No candidate data found." description="Select a demo candidate with application data." />
   }
 
   return (
     <section className="flex flex-col gap-6">
       <ViewHeader
         icon={<UserRoundCheck className="size-5" aria-hidden="true" />}
-        title={`${currentUser.name} 지원자 화면`}
+        title={`${currentUser.name} Candidate View`}
         badge={getStatusLabel(application.status)}
-        description={`${currentUser.title}로 로그인된 상태입니다. 본인의 신청 정보와 면접 진행 상태만 확인합니다.`}
+        description={`${currentUser.title} can review submitted details and the current interview state.`}
       />
       <div className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
         <section className="rounded-lg border border-border bg-card p-4">
-          <h2 className="mb-4 text-base font-semibold">기본 프로필</h2>
+          <h2 className="mb-4 text-base font-semibold">Profile</h2>
           <DescriptionList
             items={[
-              ['이름', currentUser.name],
-              ['지원 포지션', profile.position],
-              ['이메일', profile.email],
-              ['전화번호', profile.phone],
+              ['Name', currentUser.name],
+              ['Position', profile.position],
+              ['Email', profile.email],
+              ['Phone', profile.phone],
             ]}
           />
         </section>
         <section className="rounded-lg border border-border bg-card p-4">
-          <h2 className="mb-4 text-base font-semibold">이력서와 포트폴리오 요약</h2>
+          <h2 className="mb-4 text-base font-semibold">Resume and Portfolio</h2>
           <DescriptionList
             items={[
-              ['이력서', profile.resumeSummary],
-              ['포트폴리오', profile.portfolioSummary],
+              ['Resume', profile.resumeSummary],
+              ['Portfolio', profile.portfolioSummary],
             ]}
           />
         </section>
       </div>
       <section className="rounded-lg border border-border bg-card p-4">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-base font-semibold">내 면접 신청 상태</h2>
+          <h2 className="text-base font-semibold">Interview Request</h2>
           <StatusBadge label={getStatusLabel(application.status)} />
         </div>
         <DataTable
-          columns={['신청 ID', '가능 시간', '추천 일정', '확정 일정', '면접관', '평가 상태']}
+          columns={['Request ID', 'Available Times', 'Recommended Time', 'Confirmed Time', 'Interviewer', 'Evaluation']}
           rows={[
             [
               application.id,
@@ -247,7 +279,7 @@ function CandidateView({ currentUser }: { currentUser: FakeUser }) {
               application.recommendedTime,
               application.confirmedTime,
               getUserName(application.interviewerId),
-              evaluation?.status ?? '평가 전',
+              evaluation?.status ?? 'Pending',
             ],
           ]}
         />
@@ -261,17 +293,17 @@ function RecruiterView({ currentUser }: { currentUser: FakeUser }) {
     <section className="flex flex-col gap-6">
       <ViewHeader
         icon={<CalendarCheck className="size-5" aria-hidden="true" />}
-        title={`${currentUser.name} 채용담당자 화면`}
-        badge="전체 신청 관리"
-        description="모든 지원자의 신청, 추천 일정, 확정 일정, 배정 면접관을 확인합니다."
+        title={`${currentUser.name} Recruiter View`}
+        badge="All requests"
+        description="Review candidate requests, recommended schedules, confirmed times, and assigned interviewers."
       />
       <section className="rounded-lg border border-border bg-card p-4">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-base font-semibold">지원자 일정 조율 현황</h2>
-          <StatusBadge label={`${applications.length}건`} />
+          <h2 className="text-base font-semibold">Scheduling Overview</h2>
+          <StatusBadge label={`${applications.length} requests`} />
         </div>
         <DataTable
-          columns={['지원자', '포지션', '신청 상태', '추천 일정', '확정 일정', '배정 면접관']}
+          columns={['Candidate', 'Position', 'Status', 'Recommended Time', 'Confirmed Time', 'Interviewer']}
           rows={applications.map((application) => {
             const profile = candidateProfiles.find((item) => item.userId === application.candidateId)
 
@@ -297,17 +329,17 @@ function InterviewerView({ currentUser }: { currentUser: FakeUser }) {
     <section className="flex flex-col gap-6">
       <ViewHeader
         icon={<ClipboardCheck className="size-5" aria-hidden="true" />}
-        title={`${currentUser.name} 면접관 화면`}
-        badge="배정 면접"
-        description="본인에게 배정된 면접의 자동 생성 질문과 평가 상태를 확인합니다."
+        title={`${currentUser.name} Interviewer View`}
+        badge="Assigned interviews"
+        description="Review assigned interviews, generated questions, evaluation scores, and comments."
       />
       <section className="rounded-lg border border-border bg-card p-4">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-base font-semibold">배정된 면접 목록</h2>
-          <StatusBadge label={`${assignedApplications.length}건`} />
+          <h2 className="text-base font-semibold">Assigned Interviews</h2>
+          <StatusBadge label={`${assignedApplications.length} requests`} />
         </div>
         <DataTable
-          columns={['지원자', '확정 일정', '자동 생성 질문', '평가 점수', '평가 상태', '코멘트']}
+          columns={['Candidate', 'Confirmed Time', 'Generated Questions', 'Score', 'Status', 'Comment']}
           rows={assignedApplications.map((application) => {
             const questionSet = questionSets.find((item) => item.applicationId === application.id)
             const evaluation = evaluations.find((item) => item.applicationId === application.id)
@@ -315,9 +347,9 @@ function InterviewerView({ currentUser }: { currentUser: FakeUser }) {
             return [
               getUserName(application.candidateId),
               application.confirmedTime,
-              questionSet?.questions.join(' / ') ?? '질문 없음',
-              evaluation?.score ?? '대기',
-              evaluation?.status ?? '평가 전',
+              questionSet?.questions.join(' / ') ?? 'No questions',
+              evaluation?.score ?? 'Pending',
+              evaluation?.status ?? 'Pending',
               evaluation?.comment ?? '-',
             ]
           })}
@@ -416,14 +448,14 @@ function StatusBadge({ label }: { label: string }) {
 }
 
 function getUserName(userId: string) {
-  return fakeUsers.find((user) => user.id === userId)?.name ?? '알 수 없음'
+  return fakeUsers.find((user) => user.id === userId)?.name ?? 'Unknown user'
 }
 
 function getRoleLabel(role: UserRole) {
   const labels: Record<UserRole, string> = {
-    candidate: '지원자',
-    recruiter: '채용담당자',
-    interviewer: '면접관',
+    candidate: 'Candidate',
+    recruiter: 'Recruiter',
+    interviewer: 'Interviewer',
   }
 
   return labels[role]
@@ -431,10 +463,10 @@ function getRoleLabel(role: UserRole) {
 
 function getStatusLabel(status: ApplicationStatus) {
   const labels: Record<ApplicationStatus, string> = {
-    submitted: '신청 완료',
-    confirmed: '일정 확정',
-    evaluating: '평가 진행',
-    completed: '평가 완료',
+    submitted: 'Submitted',
+    confirmed: 'Confirmed',
+    evaluating: 'Evaluating',
+    completed: 'Complete',
   }
 
   return labels[status]
