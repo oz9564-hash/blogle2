@@ -1,73 +1,84 @@
-# React + TypeScript + Vite
+# Blogle2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+수강생들이 같은 기준으로 AI와 함께 개발하기 위한 SPA 프로젝트입니다.
 
-Currently, two official plugins are available:
+이 레포의 문서는 완성된 정답이 아니라, 팀이 기본값을 기준으로 논의하고 확정해가는 출발점입니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 프로젝트 전제
 
-## React Compiler
+- 이 프로젝트는 React, TypeScript, Vite 기반 SPA입니다.
+- 코딩, 문서 수정, 커밋, PR 생성은 AI가 수행하는 것을 기본으로 합니다.
+- 수강생은 요구사항 결정, 기준 합의, 결과 검토, 승인 역할을 합니다.
+- 헤더의 유저 전환 UI는 개발과 시연을 위한 핵심 구조입니다.
+- Firebase 로그인은 구현하지 않습니다.
+- Firebase는 필요 시 데이터 저장과 배포 중심으로만 사용합니다.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 실행 방법
 
-## Expanding the ESLint configuration
+1. 의존성을 설치합니다.
+   - 권장: `bun install`
+2. 환경변수 파일을 준비합니다.
+   - `.env.example`을 참고해 `.env`를 만듭니다.
+3. 개발 서버를 실행합니다.
+   - `bun run dev`
+4. 배포 전 빌드를 확인합니다.
+   - `bun run build`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 문서 검토 순서
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. `AGENTS.md`
+   - AI가 지켜야 할 작업 규칙과 금지 사항을 정합니다.
+2. `docs/project-rules.md`
+   - 여러 수강생이 AI를 통해 협업하는 방식을 정합니다.
+3. `docs/data-guide.md`
+   - 유저, 역할, 더미 데이터, DB 구조 기준을 정합니다.
+4. `docs/design-system.md`
+   - 모든 화면이 따라야 할 최소 디자인 기준을 정합니다.
+5. `docs/firebase-guide.md`
+   - Firebase 사용 범위, 환경변수, 배포 기준을 정합니다.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 문서 운영 방식
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- 각 문서의 기본값은 일단 따라도 되는 기준입니다.
+- 팀 논의 후 바꾸기로 한 내용은 `최종 결정` 영역에 기록합니다.
+- 결정이 바뀌면 `변경 이력`에 이유를 남깁니다.
+- 코드보다 문서 기준이 먼저입니다. 기준이 없으면 먼저 문서에 기록합니다.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## AI 작업 요청 기본 흐름
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. 작업 목적을 정합니다.
+2. 영향을 받는 역할 화면을 정합니다.
+   - 지원자
+   - 채용담당자
+   - 면접관
+   - 공통 헤더
+   - 데이터/Firebase
+3. 관련 문서를 확인합니다.
+4. AI에게 작업을 요청합니다.
+5. AI가 실행, 빌드, 린트 결과를 확인합니다.
+6. 수강생이 결과를 검토하고 승인합니다.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 유지해야 할 핵심 구조
+
+- SPA 구조를 유지합니다.
+- 헤더의 유저 전환 UI를 유지합니다.
+- 현재 선택된 유저와 역할에 따라 화면이 달라지는 구조를 유지합니다.
+- 각 페이지와 기능은 공통 디자인 시스템을 따릅니다.
+- 화면마다 임의로 다른 디자인 톤을 만들지 않습니다.
+
+## 현재 기술 기준
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- Firebase
+- Bun
+
+## 주의사항
+
+- `.env`는 Git에 올리지 않습니다.
+- Firebase 키는 `.env.example`에 값 없이 이름만 공유합니다.
+- Firebase 로그인은 구현하지 않습니다.
+- 공통 헤더와 유저 전환 구조는 임의로 제거하지 않습니다.
+- 디자인 기준을 벗어나는 UI는 먼저 문서 기준을 수정해야 합니다.
